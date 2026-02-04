@@ -121,7 +121,8 @@ export default function Portfolio() {
               </p>
               <div className="flex justify-center md:justify-start gap-6 pt-4">
                 <SocialButton href="https://github.com/NerfedD" icon={Github} label="GitHub" />
-                <SocialButton href="mailto:patnugot0304@gmail.com" icon={Mail} label="Email" />
+                <SocialButton href="https://mail.google.com/mail/?view=cm&fs=1&to=patnugot0304@gmail.com" icon={Mail} label="Gmail" 
+/>
               </div>
             </div>
 
