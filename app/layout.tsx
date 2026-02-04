@@ -15,6 +15,9 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Patnugot Portfolio",
   description: "My Portfolio",
+  icons: {
+    icon: "/icon.png",
+  }
 };
 
 export default function RootLayout({

@@ -99,7 +99,7 @@ export default function Portfolio() {
       {/* 📦 MAIN CONTENT */}
       <div className="max-w-6xl mx-auto px-6 relative z-10">
         
-        {/* 👤 HERO SECTION (Home) */}
+        {/* (Home) */}
         <section className="min-h-screen flex flex-col justify-center pt-10 pb-20">
           <motion.div 
             initial={{ opacity: 0, scale: 0.9 }} 
@@ -110,10 +110,10 @@ export default function Portfolio() {
             {/* Text Side */}
             <div className="space-y-8 text-center md:text-left max-w-2xl">
               <div className="inline-block px-4 py-2 bg-cyan-950/50 border border-cyan-800 rounded text-sm tracking-wider text-cyan-300 mb-2">
-                STUDENT
+                NerfedD
               </div>
               <h1 className="text-5xl md:text-7xl font-black tracking-tighter text-white drop-shadow-[0_0_25px_rgba(34,211,238,0.4)]">
-                NERFED<span className="text-cyan-500">D</span>
+                EDD VINCENT <span className="text-cyan-500">PATNUGOT</span>
               </h1>
               <p className="text-xl md:text-2xl text-slate-400 leading-relaxed border-l-4 border-cyan-900 pl-6">
                 Computer Science Student. <br />
