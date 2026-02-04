@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react"; // <--- Added for the dropdown logic
+import { useState } from "react";
 import { 
   Mail, 
   Github, 
@@ -13,8 +13,12 @@ import {
   Code2,
   Globe,
   Database,
-  Menu, // <--- New Icon for mobile menu
-  X     // <--- New Icon for closing menu
+  Menu, 
+  X,
+  Phone,
+  Facebook,
+  Instagram,
+  MessageCircle // Using this for Discord
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -46,6 +50,15 @@ const PROJECTS = [
   }
 ];
 
+const CONTACT_INFO = [
+  { label: "Phone", value: "+63 938 482 5324", icon: Phone, link: "tel:+639384825324", color: "text-green-400" },
+  { label: "Email", value: "patnugot0304@gmail.com", icon: Mail, link: "mailto:patnugot0304@gmail.com", color: "text-pink-400" },
+  { label: "Facebook", value: "Edd Vincent", icon: Facebook, link: "https://www.facebook.com/edd.vincent.90", color: "text-blue-500" },
+  { label: "Instagram", value: "@nerfedd_deez", icon: Instagram, link: "https://www.instagram.com/nerfedd_deez/", color: "text-purple-500" },
+  { label: "Discord", value: "nerfedligma", icon: MessageCircle, link: null, color: "text-indigo-400" }, // Link is null, strictly informational
+  { label: "GitHub", value: "NerfedD", icon: Github, link: "https://github.com/NerfedD", color: "text-slate-200" },
+];
+
 // --- ANIMATION SETTINGS ---
 const fadeInUp = {
   hidden: { opacity: 0, y: 60 },
@@ -57,16 +70,14 @@ const staggerContainer = {
   visible: {
     opacity: 1,
     transition: {
-      staggerChildren: 0.2
+      staggerChildren: 0.1
     }
   }
 };
 
 // --- MAIN COMPONENT ---
 export default function Portfolio() {
-  // 🕹️ STATE: Controls the mobile dropdown menu
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
   const toggleMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
 
   return (
@@ -78,16 +89,13 @@ export default function Portfolio() {
         <div className="absolute left-0 right-0 top-0 -z-10 m-auto h-[310px] w-[310px] rounded-full bg-cyan-500 opacity-20 blur-[100px]"></div>
       </div>
 
-      {/* 🕹️ HUD DASHBOARD (Fixed Top) */}
+      {/* 🕹️ HUD DASHBOARD */}
       <nav className="fixed top-0 left-0 right-0 z-50 backdrop-blur-md bg-slate-950/90 border-b border-cyan-900/30 px-6 py-4">
         <div className="max-w-6xl mx-auto flex justify-between items-center">
-          
-          {/* LEFT: Logo / Name */}
           <div className="font-black tracking-tighter text-white text-lg">
             NERFED<span className="text-cyan-500">D</span>
           </div>
 
-          {/* CENTER: Desktop Navigation (Hidden on Mobile) */}
           <ul className="hidden md:flex gap-8 text-sm font-bold tracking-widest text-slate-400">
             {['HOME', 'ABOUT', 'PROJECTS', 'CONTACT'].map((item) => (
               <li key={item}>
@@ -101,10 +109,7 @@ export default function Portfolio() {
             ))}
           </ul>
 
-          {/* RIGHT: Status (Desktop) OR Hamburger (Mobile) */}
           <div className="flex items-center gap-4">
-            
-            {/* Status Indicators (Always visible, but smaller on mobile) */}
             <div className="hidden md:flex items-center gap-4 text-xs font-mono text-slate-500">
               <div className="flex items-center gap-2 animate-pulse">
                 <div className="w-2 h-2 bg-green-500 rounded-full shadow-[0_0_10px_#22c55e]"></div>
@@ -113,8 +118,6 @@ export default function Portfolio() {
               <span className="opacity-30">|</span>
               <span>LVL 21</span>
             </div>
-
-            {/* 📱 MOBILE MENU BUTTON */}
             <button 
               onClick={toggleMenu}
               className="md:hidden text-cyan-400 hover:text-white transition-colors p-1 border border-cyan-900/50 rounded bg-slate-900/50"
@@ -124,7 +127,6 @@ export default function Portfolio() {
           </div>
         </div>
 
-        {/* 📱 MOBILE DROPDOWN PANEL */}
         <AnimatePresence>
           {isMobileMenuOpen && (
             <motion.div
@@ -138,7 +140,7 @@ export default function Portfolio() {
                   <li key={item}>
                     <a 
                       href={item === 'HOME' ? '#' : `#${item.toLowerCase()}`} 
-                      onClick={() => setIsMobileMenuOpen(false)} // Close menu on click
+                      onClick={() => setIsMobileMenuOpen(false)}
                       className="block py-3 hover:text-cyan-400 hover:bg-slate-900/50 rounded transition-all border border-transparent hover:border-cyan-900/30"
                     >
                       {item}
@@ -146,7 +148,6 @@ export default function Portfolio() {
                   </li>
                 ))}
               </ul>
-              {/* Mobile Status Footer */}
               <div className="border-t border-slate-900 py-3 bg-slate-900/30 text-center text-xs text-slate-500">
                  STATUS: <span className="text-green-500">ONLINE</span> • LVL 21
               </div>
@@ -166,16 +167,13 @@ export default function Portfolio() {
             transition={{ duration: 0.8 }}
             className="flex flex-col-reverse md:flex-row items-center justify-center gap-10 md:gap-24 w-full"
           >
-            {/* Text Side */}
             <div className="space-y-6 md:space-y-8 text-center md:text-left max-w-2xl">
               <div className="inline-block px-4 py-2 bg-cyan-950/50 border border-cyan-800 rounded text-xs md:text-sm tracking-wider text-cyan-300 mb-2">
                 STUDENT
               </div>
-              
               <h1 className="text-4xl md:text-7xl font-black tracking-tighter text-white drop-shadow-[0_0_25px_rgba(34,211,238,0.4)]">
                 EDD VINCENT <br className="md:hidden" /> <span className="text-cyan-500">PATNUGOT</span>
               </h1>
-              
               <p className="text-lg md:text-2xl text-slate-400 leading-relaxed md:border-l-4 md:border-cyan-900 md:pl-6">
                 Computer Science Student. <br />
                 Aspiring <span className="text-white">Game Developer</span> & <span className="text-white">Full-Stack Dev</span>.
@@ -191,7 +189,6 @@ export default function Portfolio() {
               </div>
             </div>
 
-            {/* Photo Side */}
             <div className="relative shrink-0 group mt-10 md:mt-0">
               <div className="absolute inset-0 border-2 border-dashed border-cyan-500/30 rounded-full animate-[spin_10s_linear_infinite]"></div>
               <div className="relative w-48 h-48 md:w-80 md:h-80 rounded-full overflow-hidden border-4 border-slate-800 bg-slate-900 shadow-[0_0_50px_rgba(6,182,212,0.4)] group-hover:shadow-[0_0_80px_rgba(6,182,212,0.6)] transition-all duration-500">
@@ -200,7 +197,6 @@ export default function Portfolio() {
             </div>
           </motion.div>
 
-          {/* Scroll Down Indicator */}
           <motion.div 
             initial={{ opacity: 0 }} 
             animate={{ opacity: 1 }} 
@@ -220,7 +216,6 @@ export default function Portfolio() {
             variants={fadeInUp}
             className="max-w-5xl mx-auto bg-slate-900/50 border border-slate-800 p-6 md:p-12 rounded-2xl backdrop-blur-sm"
           >
-            {/* Header */}
             <div className="flex items-center gap-4 mb-8">
               <div className="w-12 h-12 bg-cyan-900/30 rounded-full flex items-center justify-center border border-cyan-500/30 text-cyan-400">
                 <Terminal size={24} />
@@ -231,7 +226,6 @@ export default function Portfolio() {
               </div>
             </div>
 
-            {/* Bio Text */}
             <div className="space-y-6 text-slate-300 leading-relaxed text-base md:text-lg mb-12">
               <p>
                 I am a Computer Science student who believes technology has no boundaries. 
@@ -247,7 +241,6 @@ export default function Portfolio() {
               </p>
             </div>
 
-            {/* 🛠️ SKILL INVENTORY */}
             <div>
               <h3 className="text-sm font-bold text-slate-500 mb-6 tracking-widest uppercase border-b border-slate-800 pb-2">Skill Inventory</h3>
               
@@ -258,7 +251,6 @@ export default function Portfolio() {
                 viewport={{ once: true }}
                 className="grid grid-cols-2 md:grid-cols-4 gap-4"
               >
-                {/* Languages */}
                 <motion.div variants={fadeInUp} className="bg-slate-950 border border-slate-800 p-4 rounded-lg hover:border-cyan-500/50 transition-colors group">
                   <div className="flex items-center gap-2 text-cyan-400 font-bold mb-2 text-sm md:text-base">
                     <Code2 size={18} /> Languages
@@ -267,7 +259,6 @@ export default function Portfolio() {
                     Python • Java • C • JavaScript
                   </div>
                 </motion.div>
-                {/* Frontend */}
                 <motion.div variants={fadeInUp} className="bg-slate-950 border border-slate-800 p-4 rounded-lg hover:border-pink-500/50 transition-colors group">
                   <div className="flex items-center gap-2 text-pink-400 font-bold mb-2 text-sm md:text-base">
                     <Globe size={18} /> Frontend
@@ -276,7 +267,6 @@ export default function Portfolio() {
                     React • Tailwind • HTML • CSS
                   </div>
                 </motion.div>
-                {/* Backend */}
                 <motion.div variants={fadeInUp} className="bg-slate-950 border border-slate-800 p-4 rounded-lg hover:border-purple-500/50 transition-colors group">
                   <div className="flex items-center gap-2 text-purple-400 font-bold mb-2 text-sm md:text-base">
                     <Database size={18} /> Backend
@@ -285,7 +275,6 @@ export default function Portfolio() {
                     Node.js • SQL
                   </div>
                 </motion.div>
-                {/* Core/Tools */}
                 <motion.div variants={fadeInUp} className="bg-slate-950 border border-slate-800 p-4 rounded-lg hover:border-green-500/50 transition-colors group">
                   <div className="flex items-center gap-2 text-green-400 font-bold mb-2 text-sm md:text-base">
                     <Cpu size={18} /> Core
@@ -300,7 +289,7 @@ export default function Portfolio() {
         </section>
 
         {/* 📂 PROJECT LOG */}
-        <section id="projects" className="py-24 md:py-32 scroll-mt-24 min-h-screen">
+        <section id="projects" className="py-24 md:py-32 scroll-mt-24">
           <motion.div
             initial="hidden"
             whileInView="visible"
@@ -328,17 +317,67 @@ export default function Portfolio() {
           </motion.div>
         </section>
 
+        {/* 📞 CONTACT HUB (New Section) */}
+        <section id="contact" className="py-24 md:py-32 scroll-mt-24 mb-12">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            variants={fadeInUp}
+          >
+            <div className="flex items-center gap-4 mb-16 justify-center">
+              <div className="h-px bg-slate-800 w-12 md:w-32"></div>
+              <h2 className="text-2xl md:text-3xl font-bold text-white tracking-widest uppercase">Contact Me</h2>
+              <div className="h-px bg-slate-800 w-12 md:w-32"></div>
+            </div>
+
+            <motion.div 
+              variants={staggerContainer}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+            >
+              {CONTACT_INFO.map((contact, index) => (
+                <motion.div key={index} variants={fadeInUp}>
+                  {contact.link ? (
+                    <a 
+                      href={contact.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-4 p-6 bg-slate-900/50 border border-slate-800 rounded-xl hover:bg-slate-800/50 hover:border-cyan-500/30 transition-all group"
+                    >
+                      <div className={`p-3 rounded-lg bg-slate-950 group-hover:scale-110 transition-transform ${contact.color}`}>
+                        <contact.icon size={24} />
+                      </div>
+                      <div>
+                        <div className="text-xs text-slate-500 uppercase tracking-wider mb-1">{contact.label}</div>
+                        <div className="text-slate-300 font-bold group-hover:text-white">{contact.value}</div>
+                      </div>
+                    </a>
+                  ) : (
+                    // Logic for items without links (like Discord username)
+                    <div className="flex items-center gap-4 p-6 bg-slate-900/50 border border-slate-800 rounded-xl cursor-default">
+                       <div className={`p-3 rounded-lg bg-slate-950 ${contact.color}`}>
+                        <contact.icon size={24} />
+                      </div>
+                      <div>
+                        <div className="text-xs text-slate-500 uppercase tracking-wider mb-1">{contact.label}</div>
+                        <div className="text-slate-300 font-bold">{contact.value}</div>
+                      </div>
+                    </div>
+                  )}
+                </motion.div>
+              ))}
+            </motion.div>
+
+          </motion.div>
+        </section>
+
         {/* FOOTER */}
-        <motion.footer 
-          id="contact" 
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-          variants={fadeInUp}
-          className="pb-12 text-center text-slate-600 text-sm border-t border-slate-900 pt-12"
-        >
-          <p className="mt-2">© {new Date().getFullYear()} NerfedD • PRESS START TO CONTINUE</p>
-        </motion.footer>
+        <footer className="pb-12 text-center text-slate-600 text-sm border-t border-slate-900 pt-12">
+          <p className="mt-2">© {new Date().getFullYear()} NerfedD</p>
+        </footer>
 
       </div>
     </main>
