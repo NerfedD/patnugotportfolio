@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react"; // <--- Added for the dropdown logic
 import { 
   Mail, 
   Github, 
@@ -11,9 +12,11 @@ import {
   Cpu,
   Code2,
   Globe,
-  Database
+  Database,
+  Menu, // <--- New Icon for mobile menu
+  X     // <--- New Icon for closing menu
 } from "lucide-react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 
 // --- DATA CONFIGURATION ---
 const PROJECTS = [
@@ -61,6 +64,11 @@ const staggerContainer = {
 
 // --- MAIN COMPONENT ---
 export default function Portfolio() {
+  // 🕹️ STATE: Controls the mobile dropdown menu
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  const toggleMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
+
   return (
     <main className="bg-slate-950 text-cyan-400 font-mono relative overflow-x-hidden selection:bg-cyan-500 selection:text-black">
       
@@ -71,9 +79,16 @@ export default function Portfolio() {
       </div>
 
       {/* 🕹️ HUD DASHBOARD (Fixed Top) */}
-      <nav className="fixed top-0 left-0 right-0 z-50 backdrop-blur-md bg-slate-950/80 border-b border-cyan-900/30 px-6 py-4">
-        <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
-          <ul className="flex gap-8 text-sm font-bold tracking-widest text-slate-400">
+      <nav className="fixed top-0 left-0 right-0 z-50 backdrop-blur-md bg-slate-950/90 border-b border-cyan-900/30 px-6 py-4">
+        <div className="max-w-6xl mx-auto flex justify-between items-center">
+          
+          {/* LEFT: Logo / Name */}
+          <div className="font-black tracking-tighter text-white text-lg">
+            NERFED<span className="text-cyan-500">D</span>
+          </div>
+
+          {/* CENTER: Desktop Navigation (Hidden on Mobile) */}
+          <ul className="hidden md:flex gap-8 text-sm font-bold tracking-widest text-slate-400">
             {['HOME', 'ABOUT', 'PROJECTS', 'CONTACT'].map((item) => (
               <li key={item}>
                 <a 
@@ -85,74 +100,125 @@ export default function Portfolio() {
               </li>
             ))}
           </ul>
-          <div className="flex items-center gap-4 text-xs font-mono text-slate-500">
-            <div className="flex items-center gap-2 animate-pulse">
-              <div className="w-2 h-2 bg-green-500 rounded-full shadow-[0_0_10px_#22c55e]"></div>
-              <span>ONLINE</span>
+
+          {/* RIGHT: Status (Desktop) OR Hamburger (Mobile) */}
+          <div className="flex items-center gap-4">
+            
+            {/* Status Indicators (Always visible, but smaller on mobile) */}
+            <div className="hidden md:flex items-center gap-4 text-xs font-mono text-slate-500">
+              <div className="flex items-center gap-2 animate-pulse">
+                <div className="w-2 h-2 bg-green-500 rounded-full shadow-[0_0_10px_#22c55e]"></div>
+                <span>ONLINE</span>
+              </div>
+              <span className="opacity-30">|</span>
+              <span>LVL 21</span>
             </div>
-            <span className="opacity-30">|</span>
-            <span>LVL 21</span>
+
+            {/* 📱 MOBILE MENU BUTTON */}
+            <button 
+              onClick={toggleMenu}
+              className="md:hidden text-cyan-400 hover:text-white transition-colors p-1 border border-cyan-900/50 rounded bg-slate-900/50"
+            >
+              {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+            </button>
           </div>
         </div>
+
+        {/* 📱 MOBILE DROPDOWN PANEL */}
+        <AnimatePresence>
+          {isMobileMenuOpen && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              className="md:hidden border-t border-cyan-900/30 bg-slate-950/95 absolute top-full left-0 right-0 overflow-hidden shadow-2xl"
+            >
+              <ul className="flex flex-col p-6 gap-4 text-center text-sm font-bold tracking-widest text-slate-400">
+                {['HOME', 'ABOUT', 'PROJECTS', 'CONTACT'].map((item) => (
+                  <li key={item}>
+                    <a 
+                      href={item === 'HOME' ? '#' : `#${item.toLowerCase()}`} 
+                      onClick={() => setIsMobileMenuOpen(false)} // Close menu on click
+                      className="block py-3 hover:text-cyan-400 hover:bg-slate-900/50 rounded transition-all border border-transparent hover:border-cyan-900/30"
+                    >
+                      {item}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+              {/* Mobile Status Footer */}
+              <div className="border-t border-slate-900 py-3 bg-slate-900/30 text-center text-xs text-slate-500">
+                 STATUS: <span className="text-green-500">ONLINE</span> • LVL 21
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </nav>
 
       {/* 📦 MAIN CONTENT */}
       <div className="max-w-6xl mx-auto px-6 relative z-10">
         
-        {/* (Home) */}
-        <section className="min-h-screen flex flex-col justify-center pt-10 pb-20">
+        {/* 👤 HERO SECTION */}
+        <section className="min-h-screen flex flex-col justify-center items-center py-20 md:py-0">
           <motion.div 
             initial={{ opacity: 0, scale: 0.9 }} 
             animate={{ opacity: 1, scale: 1 }} 
             transition={{ duration: 0.8 }}
-            className="flex flex-col-reverse md:flex-row items-center justify-center gap-16 md:gap-24"
+            className="flex flex-col-reverse md:flex-row items-center justify-center gap-10 md:gap-24 w-full"
           >
             {/* Text Side */}
-            <div className="space-y-8 text-center md:text-left max-w-2xl">
-              <div className="inline-block px-4 py-2 bg-cyan-950/50 border border-cyan-800 rounded text-sm tracking-wider text-cyan-300 mb-2">
-                NerfedD
+            <div className="space-y-6 md:space-y-8 text-center md:text-left max-w-2xl">
+              <div className="inline-block px-4 py-2 bg-cyan-950/50 border border-cyan-800 rounded text-xs md:text-sm tracking-wider text-cyan-300 mb-2">
+                STUDENT
               </div>
-              <h1 className="text-5xl md:text-7xl font-black tracking-tighter text-white drop-shadow-[0_0_25px_rgba(34,211,238,0.4)]">
-                EDD VINCENT <span className="text-cyan-500">PATNUGOT</span>
+              
+              <h1 className="text-4xl md:text-7xl font-black tracking-tighter text-white drop-shadow-[0_0_25px_rgba(34,211,238,0.4)]">
+                EDD VINCENT <br className="md:hidden" /> <span className="text-cyan-500">PATNUGOT</span>
               </h1>
-              <p className="text-xl md:text-2xl text-slate-400 leading-relaxed border-l-4 border-cyan-900 pl-6">
+              
+              <p className="text-lg md:text-2xl text-slate-400 leading-relaxed md:border-l-4 md:border-cyan-900 md:pl-6">
                 Computer Science Student. <br />
                 Aspiring <span className="text-white">Game Developer</span> & <span className="text-white">Full-Stack Dev</span>.
               </p>
-              <div className="flex justify-center md:justify-start gap-6 pt-4">
+              
+              <div className="flex justify-center md:justify-start gap-4 md:gap-6 pt-4">
                 <SocialButton href="https://github.com/NerfedD" icon={Github} label="GitHub" />
-                <SocialButton href="https://mail.google.com/mail/?view=cm&fs=1&to=patnugot0304@gmail.com" icon={Mail} label="Gmail" 
-/>
+                <SocialButton 
+                  href="https://mail.google.com/mail/?view=cm&fs=1&to=patnugot0304@gmail.com" 
+                  icon={Mail} 
+                  label="Gmail" 
+                />
               </div>
             </div>
 
             {/* Photo Side */}
-            <div className="relative shrink-0 group">
+            <div className="relative shrink-0 group mt-10 md:mt-0">
               <div className="absolute inset-0 border-2 border-dashed border-cyan-500/30 rounded-full animate-[spin_10s_linear_infinite]"></div>
-              <div className="relative w-64 h-64 md:w-80 md:h-80 rounded-full overflow-hidden border-4 border-slate-800 bg-slate-900 shadow-[0_0_50px_rgba(6,182,212,0.4)] group-hover:shadow-[0_0_80px_rgba(6,182,212,0.6)] transition-all duration-500">
+              <div className="relative w-48 h-48 md:w-80 md:h-80 rounded-full overflow-hidden border-4 border-slate-800 bg-slate-900 shadow-[0_0_50px_rgba(6,182,212,0.4)] group-hover:shadow-[0_0_80px_rgba(6,182,212,0.6)] transition-all duration-500">
                 <img src="/your-photo.png" alt="Profile" className="w-full h-full object-cover hover:scale-110 transition-transform duration-500" />
               </div>
             </div>
           </motion.div>
 
+          {/* Scroll Down Indicator */}
           <motion.div 
             initial={{ opacity: 0 }} 
             animate={{ opacity: 1 }} 
             transition={{ delay: 1, duration: 1 }}
-            className="absolute bottom-12 left-0 right-0 flex justify-center animate-bounce text-slate-500"
+            className="absolute bottom-10 left-0 right-0 flex justify-center animate-bounce text-slate-500"
           >
-            <ChevronDown size={40} />
+            <ChevronDown size={32} />
           </motion.div>
         </section>
 
         {/* 📜 ABOUT ME SECTION */}
-        <section id="about" className="py-32 relative scroll-mt-24">
+        <section id="about" className="py-24 md:py-32 relative scroll-mt-24">
           <motion.div
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: "-100px" }}
             variants={fadeInUp}
-            className="max-w-5xl mx-auto bg-slate-900/50 border border-slate-800 p-8 md:p-12 rounded-2xl backdrop-blur-sm"
+            className="max-w-5xl mx-auto bg-slate-900/50 border border-slate-800 p-6 md:p-12 rounded-2xl backdrop-blur-sm"
           >
             {/* Header */}
             <div className="flex items-center gap-4 mb-8">
@@ -160,13 +226,13 @@ export default function Portfolio() {
                 <Terminal size={24} />
               </div>
               <div>
-                <h2 className="text-2xl font-bold text-white">CHARACTER BIO</h2>
+                <h2 className="text-xl md:text-2xl font-bold text-white">CHARACTER BIO</h2>
                 <p className="text-xs text-slate-500 tracking-widest">CLASS: TECH EXPLORER</p>
               </div>
             </div>
 
             {/* Bio Text */}
-            <div className="space-y-6 text-slate-300 leading-relaxed text-lg mb-12">
+            <div className="space-y-6 text-slate-300 leading-relaxed text-base md:text-lg mb-12">
               <p>
                 I am a Computer Science student who believes technology has no boundaries. 
                 My journey began with a fascination for <span className="text-cyan-400 font-bold">Game Development</span>, 
@@ -192,55 +258,49 @@ export default function Portfolio() {
                 viewport={{ once: true }}
                 className="grid grid-cols-2 md:grid-cols-4 gap-4"
               >
-                
                 {/* Languages */}
                 <motion.div variants={fadeInUp} className="bg-slate-950 border border-slate-800 p-4 rounded-lg hover:border-cyan-500/50 transition-colors group">
-                  <div className="flex items-center gap-2 text-cyan-400 font-bold mb-2">
+                  <div className="flex items-center gap-2 text-cyan-400 font-bold mb-2 text-sm md:text-base">
                     <Code2 size={18} /> Languages
                   </div>
-                  <div className="text-sm text-slate-400 group-hover:text-white transition-colors">
+                  <div className="text-xs md:text-sm text-slate-400 group-hover:text-white transition-colors">
                     Python • Java • C • JavaScript
                   </div>
                 </motion.div>
-
                 {/* Frontend */}
                 <motion.div variants={fadeInUp} className="bg-slate-950 border border-slate-800 p-4 rounded-lg hover:border-pink-500/50 transition-colors group">
-                  <div className="flex items-center gap-2 text-pink-400 font-bold mb-2">
+                  <div className="flex items-center gap-2 text-pink-400 font-bold mb-2 text-sm md:text-base">
                     <Globe size={18} /> Frontend
                   </div>
-                  <div className="text-sm text-slate-400 group-hover:text-white transition-colors">
+                  <div className="text-xs md:text-sm text-slate-400 group-hover:text-white transition-colors">
                     React • Tailwind • HTML • CSS
                   </div>
                 </motion.div>
-
                 {/* Backend */}
                 <motion.div variants={fadeInUp} className="bg-slate-950 border border-slate-800 p-4 rounded-lg hover:border-purple-500/50 transition-colors group">
-                  <div className="flex items-center gap-2 text-purple-400 font-bold mb-2">
+                  <div className="flex items-center gap-2 text-purple-400 font-bold mb-2 text-sm md:text-base">
                     <Database size={18} /> Backend
                   </div>
-                  <div className="text-sm text-slate-400 group-hover:text-white transition-colors">
+                  <div className="text-xs md:text-sm text-slate-400 group-hover:text-white transition-colors">
                     Node.js • SQL
                   </div>
                 </motion.div>
-
                 {/* Core/Tools */}
                 <motion.div variants={fadeInUp} className="bg-slate-950 border border-slate-800 p-4 rounded-lg hover:border-green-500/50 transition-colors group">
-                  <div className="flex items-center gap-2 text-green-400 font-bold mb-2">
+                  <div className="flex items-center gap-2 text-green-400 font-bold mb-2 text-sm md:text-base">
                     <Cpu size={18} /> Core
                   </div>
-                  <div className="text-sm text-slate-400 group-hover:text-white transition-colors">
+                  <div className="text-xs md:text-sm text-slate-400 group-hover:text-white transition-colors">
                     Problem Solving • Algorithms
                   </div>
                 </motion.div>
-
               </motion.div>
             </div>
-
           </motion.div>
         </section>
 
         {/* 📂 PROJECT LOG */}
-        <section id="projects" className="py-32 scroll-mt-24 min-h-screen">
+        <section id="projects" className="py-24 md:py-32 scroll-mt-24 min-h-screen">
           <motion.div
             initial="hidden"
             whileInView="visible"
@@ -249,11 +309,10 @@ export default function Portfolio() {
             className="flex items-center gap-4 mb-16"
           >
             <Terminal className="text-pink-500 w-8 h-8" />
-            <h2 className="text-3xl font-bold text-white tracking-widest uppercase">Project Log</h2>
+            <h2 className="text-2xl md:text-3xl font-bold text-white tracking-widest uppercase">Project Log</h2>
             <div className="h-px bg-slate-800 flex-grow"></div>
           </motion.div>
           
-          {/* Grid Staggered Animation */}
           <motion.div 
             variants={staggerContainer}
             initial="hidden"
@@ -294,9 +353,9 @@ function SocialButton({ href, icon: Icon, label }: any) {
       href={href}
       target="_blank" 
       rel="noopener noreferrer"
-      className="flex items-center gap-3 bg-slate-900 border border-slate-700 hover:border-cyan-500 hover:text-cyan-400 text-slate-400 px-8 py-4 text-lg rounded hover:shadow-[0_0_20px_rgba(6,182,212,0.4)] transition-all duration-300 transform hover:-translate-y-1"
+      className="flex items-center gap-3 bg-slate-900 border border-slate-700 hover:border-cyan-500 hover:text-cyan-400 text-slate-400 px-6 py-3 md:px-8 md:py-4 text-sm md:text-lg rounded hover:shadow-[0_0_20px_rgba(6,182,212,0.4)] transition-all duration-300 transform hover:-translate-y-1"
     >
-      <Icon size={24} />
+      <Icon size={20} className="md:w-6 md:h-6" />
       <span>{label}</span>
     </a>
   );
@@ -316,17 +375,17 @@ function ProjectCard({ title, description, tags, status, icon: Icon, theme }: an
   const badgeClass = themeClass.split(" ").slice(4).join(" ");     
 
   return (
-    <div className={`group relative bg-slate-900 border border-slate-800 p-8 rounded-xl transition-all duration-300 ${borderClass}`}>
-      <div className={`absolute top-0 right-0 text-xs font-bold px-3 py-1 rounded-bl-lg ${badgeClass}`}>
+    <div className={`group relative bg-slate-900 border border-slate-800 p-6 md:p-8 rounded-xl transition-all duration-300 ${borderClass}`}>
+      <div className={`absolute top-0 right-0 text-[10px] md:text-xs font-bold px-3 py-1 rounded-bl-lg ${badgeClass}`}>
         {status}
       </div>
-      <h3 className={`text-2xl font-bold text-white mb-3 transition-colors flex items-center gap-3 ${textClass}`}>
+      <h3 className={`text-xl md:text-2xl font-bold text-white mb-3 transition-colors flex items-center gap-3 ${textClass}`}>
         <Icon size={24} /> {title}
       </h3>
-      <p className="text-slate-400 text-base mb-6 leading-relaxed">
+      <p className="text-slate-400 text-sm md:text-base mb-6 leading-relaxed">
         {description}
       </p>
-      <div className="flex flex-wrap gap-2 text-sm font-bold text-slate-500">
+      <div className="flex flex-wrap gap-2 text-xs md:text-sm font-bold text-slate-500">
         {tags.map((tag: string) => (
           <span key={tag} className={`bg-slate-800 px-3 py-1 rounded ${tagClass}`}>
             {tag}
